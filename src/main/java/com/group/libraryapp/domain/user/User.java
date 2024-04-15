@@ -29,7 +29,7 @@ public class User {
         }
     
         // age 필드에 대한 추가적인 유효성 검사
-        if (age == null || age < 0) {
+        if (age == null || age < 1) {
             throw new IllegalArgumentException(String.format("Invalid age(%d) came in", age));
         }
     
