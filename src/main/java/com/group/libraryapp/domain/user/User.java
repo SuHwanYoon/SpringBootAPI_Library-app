@@ -26,10 +26,8 @@ public class User {
     public User(String name, Integer age) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(String.format("Invalid name(%s) came in", name));
-        }
-    
-        // age 필드에 대한 추가적인 유효성 검사
-        if (age == null || age < 1) {
+        }else if (age == null || age < 1 || !(age instanceof Integer)) {
+             // age 필드에 대한 추가적인 유효성 검사
             throw new IllegalArgumentException(String.format("Invalid age(%d) came in", age));
         }
     
