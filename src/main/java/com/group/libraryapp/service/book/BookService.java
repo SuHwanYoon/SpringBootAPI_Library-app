@@ -72,6 +72,7 @@ public class BookService {
 
         //confirm Lazy Loading
         System.out.println("Hello");
+
         //7 refactoring 3,4,5,6
         user.returnBook(request.getBookName());
 

@@ -62,6 +62,11 @@ public class User {
                 .filter(history -> history.getBookName().equals(bookName))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
+        //반납상태 확인
+        // isReturn 속성이 true일 경우 예외 발생
+        if (targetHistory.isReturn()) {
+            throw new IllegalArgumentException("이미 반납된 책입니다.");
+        }
         // return status true
         targetHistory.doReturn();
     }
