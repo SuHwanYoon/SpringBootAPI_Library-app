@@ -56,7 +56,7 @@ public class UserServiceV2 {
     }
 
     @Transactional
-    public void deleteUser(String name){
+    public void deleteUser(Long id){
         //select * from USER where name = ?;
 
 /*       User deleteuser = userRepository.findByName(name);
@@ -73,8 +73,14 @@ public class UserServiceV2 {
         userRepository.delete(user)
         *
         * */
+/*
         User deleteuser = userRepository.findByName(name)
                 .orElseThrow(IllegalAccessError::new);
+*/
+        //삭제사용자 선택기준을 id로 바꿈
+        User deleteuser = userRepository.findById(id)
+                .orElseThrow(IllegalAccessError::new);
+
         //delete from user where name = ?;
         userRepository.delete(deleteuser);
     }
