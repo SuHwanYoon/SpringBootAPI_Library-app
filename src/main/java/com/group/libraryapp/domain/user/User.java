@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id= null;
-
-    @Column(nullable = false, length = 20)//name varchar2(20)
+    //동명이인 삭제 불가현상 방지를위해 동명이인 등록을 방지
+    @Column(nullable = false, length = 20, unique = true)//name varchar2(20)
     private String name;
     @Column(nullable = false)
     private Integer age;
@@ -53,6 +54,9 @@ public class User {
     }
 
     public void loanBook(String bookName){
+
+
+
         this.userLoanHistories.add(new UserLoanHistory(this,bookName));
     }
 
@@ -65,7 +69,7 @@ public class User {
         //반납상태 확인
         // isReturn 속성이 true일 경우 예외 발생
         if (targetHistory.isReturn()) {
-            throw new IllegalArgumentException("이미 반납된 책입니다.");
+            throw new IllegalArgumentException("This is already loan book");
         }
         // return status true
         targetHistory.doReturn();

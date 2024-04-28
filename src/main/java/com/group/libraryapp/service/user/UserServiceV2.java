@@ -56,10 +56,10 @@ public class UserServiceV2 {
     }
 
     @Transactional
-    public void deleteUser(Long id){
+    public void deleteUser(String name){
         //select * from USER where name = ?;
 
-/*       User deleteuser = userRepository.findByName(name);
+/*       User deleteuser = userRepository.findByOneName(name);
         if (deleteuser == null){
             throw new IllegalArgumentException();
         }
@@ -69,17 +69,13 @@ public class UserServiceV2 {
             throw new IllegalArgumentException();
         }
 
-        User user = userRepository.findByName(name);
+        User user = userRepository.findByOneName(name);
         userRepository.delete(user)
         *
         * */
-/*
         User deleteuser = userRepository.findByName(name)
                 .orElseThrow(IllegalAccessError::new);
-*/
-        //삭제사용자 선택기준을 id로 바꿈
-        User deleteuser = userRepository.findById(id)
-                .orElseThrow(IllegalAccessError::new);
+
 
         //delete from user where name = ?;
         userRepository.delete(deleteuser);

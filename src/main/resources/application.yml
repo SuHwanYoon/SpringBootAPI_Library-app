@@ -1,9 +1,16 @@
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
 spring:
   config:
     activate:
       on-profile: local
   datasource:
-    url: "jdbc:h2:mem:library;MODE=MYSQL;NON_KEYWORDS=USER"
+    url: jdbc:h2:mem:library;NON_KEYWORDS=USER
     username: "sa"
     password: ""
     driver-class-name: org.h2.Driver
@@ -14,6 +21,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+        use_sql_comments: true
         dialect: org.hibernate.dialect.H2Dialect
   h2:
     console:

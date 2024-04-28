@@ -9,8 +9,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
 //select * from USER-[find] WHERE-[By] name = ?;
 
-    //user findByName(String name);
+    //user findByOneName(String name);
     Optional<User> findByName(String name);
+
 
     List<User> findAllByNameAndAge(String name, int age);
 

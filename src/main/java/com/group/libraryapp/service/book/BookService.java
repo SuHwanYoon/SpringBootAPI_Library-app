@@ -12,6 +12,8 @@ import com.group.libraryapp.dto.book.request.BookReturnRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 public class BookService {
@@ -33,24 +35,28 @@ public class BookService {
 
     @Transactional
     public void loanBook(BookLoanRequest request) {
-        //1.get Book Object
+        //1.북 테이블에 대출하려는 책이름이 존재하는지 확인
         Book book = bookRepository.findByName(request.getBookName())
                 .orElseThrow(IllegalArgumentException::new);
-
-        //2.select user_loan_history
-        //3. if false throw exception
-        if(userLoanHistoryRepository.existsByBookNameAndIsReturn(book.getName(),false)){
-            throw new IllegalArgumentException("already loan");
-        }
-
-        //4.get User Object by userName
-        //5.if null throw IllegalArgumentException
+        //2. 유저 테이블에 해당 책이름으로 대출한 유저가 존재하는지 확인
         User user = userRepository.findByName(request.getUserName())
                 .orElseThrow(IllegalArgumentException::new);
-        //6.insert UserLoanHistory
-        //userLoanHistoryRepository.save(new UserLoanHistory(user, book.getName()));
+        //3. 유저아이디와 책이름으로 대출기록이 있는 유저의 대출기록 가져오기
+        Optional<UserLoanHistory> loanHistory
+                = userLoanHistoryRepository.findByUserIdAndBookName(user.getId(), request.getBookName());
+        //대출기록 추가를 막기 위해 해당 유저가 반납한 기록이존재한다면
+        if (loanHistory.isPresent() && loanHistory.get().isReturn()) {
+            //기존 대출목록의 상태를 다시 false로 바꿔서 대출상태로 만든다
+            loanHistory.get().reLoanBook();
+            return;
+        }
+        //다른 유저가 이미 대출된 책을 대출하려고 하는 것을 방지하기 위해 해당책이 대출중이라면
+        if(userLoanHistoryRepository.existsByBookNameAndIsReturn(book.getName(),false)){
+            //예외를 던져서 대출을 막는다
+            throw new IllegalArgumentException("already loan in service Layer");
+        }
 
-        //7.refactoring insert UserLoanHistory using User Object cascade
+        //최초로 대출하는경우
         user.loanBook(book.getName());
     }
 
