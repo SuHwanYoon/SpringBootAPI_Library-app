@@ -62,24 +62,23 @@ public class BookService {
 
     @Transactional
     public void returnBook(BookReturnRequest request) {
-        //1.get User Object by userName
-        //2.if null throw IllegalArgumentException
+        //1.화면에서 입력한 유저이름으로 검색후 존재하지않으면 예외를 던진다
         User user = userRepository.findByName(request.getUserName())
                 .orElseThrow(IllegalArgumentException::new);
 
-        //3. get UserLoanHistory Object by userId and bookName
-        //4.  using history constructor if null throw IllegalArgumentException
+        //2.유저 ID와 입력한 책이름으로 대출기록을 검색하고 존재하지 않으면 예외를 던진다
         //UserLoanHistory history = userLoanHistoryRepository.findByUserIdAndBookName(user.getId(), request.getBookName())
         //        .orElseThrow(IllegalArgumentException::new);
 
-        //5.if not null doReturn
+        //3.대출기록이 존재하면 반납상태를 Ture로 바꿔서 반납처리
         //history.doReturn();
-        //6. update(Dirty Checking) -userLoanHistoryRepository.save(history);
+        //4. 변화된 대출기록을 insert해서 update(Dirty Checking)
+        // userLoanHistoryRepository.save(history);
 
         //confirm Lazy Loading
         System.out.println("Hello");
 
-        //7 refactoring 3,4,5,6
+        //7.  2~4의 과정을 User엔티티 로직 리팩토링으로 간소화
         user.returnBook(request.getBookName());
 
     }
